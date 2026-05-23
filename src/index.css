@@ -69,3 +69,62 @@ header p {
 .task-status.pending {
   color: #ffeb3b;
 }
+
+.todo-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.todo-input {
+  flex-grow: 1;
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #1e1e24;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+}
+
+.todo-input:focus {
+  border-color: #61dafb;
+}
+
+.todo-button {
+  padding: 10px 20px;
+  background: #61dafb;
+  color: #1e1e24;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.todo-button:hover {
+  background: #4fa8c7;
+}
+
+.delete-button {
+  background: transparent;
+  color: #ff5252;
+  border: 1px solid #ff5252;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.delete-button:hover {
+  background: #ff5252;
+  color: #fff;
+}
+
+.empty-message {
+  text-align: center;
+  color: #aaa;
+  font-style: italic;
+  margin-top: 20px;
+}
