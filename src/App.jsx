@@ -1,42 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoList from './components/TodoList';
 import TodoForm from './components/TodoForm';
 
 function App() {
-  // Використовується хук useState для динамічного списку задач
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Вивчити базові концепції React" },
-    { id: 2, title: "Розібратися з React Hooks (useState)" }
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const API_URL = 'http://localhost:3000/tasks';
 
-  // Функція для додавання нової задачі
+  // Хук useEffect: завантажує дані з сервера один раз при старті додатка
+  useEffect(() => {
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => setTasks(data))
+      .catch(err => console.error("Помилка завантаження даних:", err));
+  }, []);
+
+  // Operation 1: Додавання задачі (POST)
   const addTask = (title) => {
-    const newId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
-    const newTask = {
-      id: newId,
-      title: title
-    };
-    setTasks([...tasks, newTask]); // Хук оновлення стану (спред-оператор)
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title })
+    })
+    .then(res => res.json())
+    .then(newTask => {
+      setTasks([...tasks, newTask]); // Оновлення інтерфейсу отриманими з сервера даними
+    })
+    .catch(err => console.error("Помилка додавання:", err));
   };
 
-  // Функція для видалення задачі за її id
+  // Operation 2: Видалення задачі (DELETE)
   const deleteTask = (id) => {
-    const updatedTasks = tasks.filter(task => task.id !== id);
-    setTasks(updatedTasks); // Хук оновлення стану
+    fetch(`${API_URL}/${id}`, {
+      method: 'DELETE'
+    })
+    .then(() => {
+      setTasks(tasks.filter(task => task.id !== id));
+    })
+    .catch(err => console.error("Помилка видалення:", err));
+  };
+
+  // Operation 3: Редагування задачі (PUT)
+  const updateTask = (id, updatedTitle) => {
+    fetch(`${API_URL}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: updatedTitle })
+    })
+    .then(res => res.json())
+    .then(updatedTask => {
+      setTasks(tasks.map(task => task.id === id ? updatedTask : task));
+    })
+    .catch(err => console.error("Помилка оновлення:", err));
   };
 
   return (
     <div className="app-container">
       <header>
-        <h1>Мій Динамічний Todo</h1>
-        <p>Практична робота: React Hooks</p>
+        <h1>Fullstack Todo (Express + React)</h1>
+        <p>Практична робота: Зв'язок клієнт-сервер</p>
       </header>
       <main>
-        {/* Передається функцію додавання у форму */}
         <TodoForm addTask={addTask} />
-        
-        {/* Передається список та функцію видалення в компонент списку */}
-        <TodoList tasks={tasks} deleteTask={deleteTask} />
+        <TodoList tasks={tasks} deleteTask={deleteTask} updateTask={updateTask} />
       </main>
     </div>
   );

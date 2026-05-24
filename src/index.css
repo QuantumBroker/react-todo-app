@@ -128,3 +128,26 @@ header p {
   font-style: italic;
   margin-top: 20px;
 }
+
+.item-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.edit-button, .save-button {
+  background: transparent;
+  border: 1px solid #61dafb;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.edit-input {
+  flex-grow: 1;
+  background: #2a2a35;
+  border: 1px solid #61dafb;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+}
